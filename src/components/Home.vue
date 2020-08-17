@@ -7,7 +7,7 @@
       <v-flex
         xs12
         sm6
-        class="text-xs-center text-sm-right"
+        class="text-center text-sm-right pa-2"
       >
         <v-btn
           large
@@ -20,7 +20,7 @@
       <v-flex
         xs12
         sm6
-        class="text-xs-center text-sm-left"
+        class="text-center text-sm-left pa-2"
       >
         <v-btn
           large
@@ -37,13 +37,14 @@
       class="mt-2"
     >
       <v-flex xs12>
-        <v-carousel>
+        <v-carousel style="cursor: pointer">
           <v-carousel-item
             v-for="meetup in meetups"
             :key="meetup.id"
             :src="meetup.imageUrl"
             reverse-transition="fade-transition"
             transition="fade-transition"
+            @click="onLoadMeetup(meetup.id)"
           >
             <div class="title">
               {{ meetup.title }}
@@ -78,16 +79,21 @@ export default {
           imageUrl: 'https://www.brinksresiliencetraining.com/wp-content/uploads/2019/10/New-York-City.jpg'
         },
         {
-          id: 'alksdjfaldfjasdfasfd',
+          id: 'bakldfjlajflasdf',
           title: 'Meetup in Paris',
           imageUrl: 'https://es.oui.sncf/assets/vocabularies/locality/visuals/Paris_destination_1.jpg'
         },
         {
-          id: 'alksdjfaldfjasdfaasdfd',
+          id: 'cakjdflajflalfjasldf',
           title: 'Meetup in Russia',
           imageUrl: 'https://static3lonelyplanetes.cdnstatics.com/sites/default/files/styles/max_1300x1300/public/blog/rusia_moscu_puertaresurreccion_plazaroja_shutterstockrf_493315507_marco_rubino_shutterstock.jpg?itok=wXAriIgg'
         }
       ]
+    }
+  },
+  methods: {
+    onLoadMeetup(id) {
+      this.$router.push('/meetups/' + id)
     }
   }
 }
