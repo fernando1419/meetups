@@ -8,17 +8,17 @@
         <v-card>
           <v-card-title>
             <h6 class="primary--text">
-              My meetup
+              {{ meetup.title }}
             </h6>
           </v-card-title>
           <v-img
             class="white--text align-end"
             height="350px"
-            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+            :src="meetup.imageUrl"
           />
           <v-card-text>
             <div class="info--text">
-              Fecha
+              {{ meetup.date }}
             </div>
             <div>
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores facere sit et dignissimos corrupti accusantium maxime voluptatum quisquam autem, quasi nihil! Alias fugit provident eos amet! Placeat provident omnis mollitia!
@@ -35,3 +35,16 @@
     </v-layout>
   </v-container>
 </template>
+
+
+<script>
+export default {
+  // eslint-disable-next-line vue/require-prop-types
+  props: ['id'],
+  computed: {
+    meetup() {
+      return this.$store.getters.getLoadedMeetup(this.id);
+    }
+  }
+}
+</script>

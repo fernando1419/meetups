@@ -1,8 +1,11 @@
 <template>
   <v-container>
     <v-layout
+      v-for="meetup in meetups"
+      :key="meetup.id"
       row
       wrap
+      class="mb-2"
     >
       <v-flex
         xs12
@@ -22,10 +25,11 @@
               >
                 <v-img
                   class="white--text align-end pl-2"
-                  height="200px"
-                  src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                  height="130px"
+                  width="200px"
+                  :src="meetup.imageUrl"
                 >
-                  <v-card-title>Top 10 Australian beaches</v-card-title>
+                  <!-- <v-card-title>{{ meetup.title }}</v-card-title> -->
                 </v-img>
               </v-flex>
               <v-flex
@@ -35,16 +39,16 @@
               >
                 <v-card-title primary-title>
                   <div>
-                    <h5 class="white--text mb-0">
-                      Meetup
+                    <h5 class="mb-0">
+                      {{ meetup.title }}
                     </h5>
-                    <div>20th July 2020</div>
+                    <div>{{ meetup.date }}</div>
                   </div>
                 </v-card-title>
                 <v-card-actions>
                   <v-btn
                     text
-                    to="/meetups/1"
+                    :to="'/meetups/' + meetup.id "
                   >
                     <v-icon
                       left
@@ -66,7 +70,11 @@
 
 <script>
 export default {
-
+  computed: {
+    meetups() {
+      return this.$store.getters.getLoadedMeetups; // call getter as a property without parentesis.
+    }
+  }
 }
 </script>
 

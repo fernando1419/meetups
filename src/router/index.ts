@@ -29,6 +29,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/meetups/:id",
     name: "Meetup",
+    props: true,
     component: Meetup
   },
   {

@@ -70,25 +70,9 @@
 
 <script>
 export default {
-  data() {
-    return {
-      meetups: [
-        {
-          id: 'alksdjfaldfj',
-          title: 'Meetup in New York',
-          imageUrl: 'https://www.brinksresiliencetraining.com/wp-content/uploads/2019/10/New-York-City.jpg'
-        },
-        {
-          id: 'bakldfjlajflasdf',
-          title: 'Meetup in Paris',
-          imageUrl: 'https://es.oui.sncf/assets/vocabularies/locality/visuals/Paris_destination_1.jpg'
-        },
-        {
-          id: 'cakjdflajflalfjasldf',
-          title: 'Meetup in Russia',
-          imageUrl: 'https://static3lonelyplanetes.cdnstatics.com/sites/default/files/styles/max_1300x1300/public/blog/rusia_moscu_puertaresurreccion_plazaroja_shutterstockrf_493315507_marco_rubino_shutterstock.jpg?itok=wXAriIgg'
-        }
-      ]
+  computed: {
+    meetups() {
+      return this.$store.getters.getFeaturedMeetups;
     }
   },
   methods: {
