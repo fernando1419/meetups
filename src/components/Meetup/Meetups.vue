@@ -42,7 +42,7 @@
                     <h5 class="mb-0">
                       {{ meetup.title }}
                     </h5>
-                    <div>{{ meetup.date }}</div>
+                    <div>{{ meetup.date | date }}</div>
                   </div>
                 </v-card-title>
                 <v-card-actions>

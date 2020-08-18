@@ -103,7 +103,9 @@
               sm6
               offset-sm3
             >
-              <v-date-picker v-model="date" />
+              <v-date-picker
+                v-model="date"
+              />
               <p> {{ date }} </p>
             </v-flex>
           </v-layout>
@@ -118,7 +120,7 @@
                 v-model="time"
                 format="24hr"
               />
-              <p> {{ time }} </p>
+              <!-- <p> {{ time }} </p> -->
             </v-flex>
           </v-layout>
 
@@ -135,7 +137,7 @@
               >
                 Create Meetup
               </v-btn>
-              {{ submittableDateTime }}
+              <!-- {{ submittableDateTime }} -->
             </v-flex>
           </v-layout>
         </v-form>
@@ -161,7 +163,9 @@ export default {
       return this.title !== '' && this.location !== '' && this.imageUrl !== '' && this.description !== ''
     },
     submittableDateTime() {
+
       const date = new Date(this.date)
+      date.setDate(date.getDate() + 1) // workaround, always getting 1 day before after picking.
       if (typeof this.time === 'string') {
         const hours = this.time.match(/^(\d+)/)[1];
         const minutes = this.time.match(/:(\d+)/)[1];
