@@ -18,10 +18,10 @@
           />
           <v-card-text>
             <div class="info--text">
-              {{ meetup.date }}
+              {{ meetup.date }} - {{ meetup.location }}
             </div>
             <div>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores facere sit et dignissimos corrupti accusantium maxime voluptatum quisquam autem, quasi nihil! Alias fugit provident eos amet! Placeat provident omnis mollitia!
+              {{ meetup.description }}
             </div>
           </v-card-text>
           <v-card-actions>

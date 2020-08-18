@@ -11,21 +11,27 @@ export default new Vuex.Store({
         title: "Meetup in New York",
         imageUrl:
           "https://www.brinksresiliencetraining.com/wp-content/uploads/2019/10/New-York-City.jpg",
-        date: "2020-05-18"
+        date: "2020-05-18",
+        location: "New York City",
+        description: "Meetup at New York City"
       },
       {
         id: "bakldfjlajflasdf",
         title: "Meetup in Paris",
         imageUrl:
           "https://es.oui.sncf/assets/vocabularies/locality/visuals/Paris_destination_1.jpg",
-        date: "2020-05-20"
+        date: "2020-05-20",
+        location: "Paris City",
+        description: "Meetup at Paris City"
       },
       {
         id: "cakjdflajflalfjasldf",
         title: "Meetup in Russia",
         imageUrl:
           "https://static3lonelyplanetes.cdnstatics.com/sites/default/files/styles/max_1300x1300/public/blog/rusia_moscu_puertaresurreccion_plazaroja_shutterstockrf_493315507_marco_rubino_shutterstock.jpg?itok=wXAriIgg",
-        date: "2020-05-25"
+        date: "2020-05-25",
+        location: "Russia City",
+        description: "Meetup at Russia City"
       }
     ],
     user: {
