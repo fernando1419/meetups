@@ -106,7 +106,6 @@
               <v-date-picker
                 v-model="date"
               />
-              <p> {{ date }} </p>
             </v-flex>
           </v-layout>
 
