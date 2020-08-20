@@ -71,6 +71,19 @@ export default new Vuex.Store({
           commit("createUserMutation", newUserData);
         })
         .catch(error => console.log(error));
+    },
+    signinUserAction({ commit }, payload) {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(payload.email, payload.password)
+        .then(response => {
+          const newUserData = {
+            id: response.user?.uid,
+            registeredMeetups: []
+          };
+          commit("createUserMutation", newUserData);
+        })
+        .catch(error => console.log(error));
     }
   },
   getters: {

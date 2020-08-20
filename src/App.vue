@@ -96,8 +96,10 @@ export default Vue.extend({
       return this.unAuthenticatedMenuItems;
     },
     userIsAuthenticated () {
-      return this.$store.getters.getUser?.user ? true : false
-      // return this.$store.getters.getUser !== null && this.$store.getters.getUser !== undefined // same as above
+      const authenticated = this.$store.getters.getUser !== null && this.$store.getters.getUser !== undefined
+      // console.log(authenticated)
+
+      return authenticated
     }
   }
 })
