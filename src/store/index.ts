@@ -158,6 +158,10 @@ export default new Vuex.Store({
       // this payload is got from firebase.
       commit("createUserMutation", { id: payload.uid, registeredMeetups: [] });
     },
+    signoutAction({ commit }) {
+      firebase.auth().signOut(); // removes from localstorage
+      commit("createUserMutation", null); // in store
+    },
     clearErrorAction({ commit }) {
       commit("clearErrorMutation");
     }

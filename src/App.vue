@@ -23,6 +23,26 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+
+      <v-divider />
+
+      <v-list
+        dense
+        nav
+      >
+        <v-list-item
+          v-if="userIsAuthenticated"
+          link
+          @click="onSignout"
+        >
+          <v-list-item-icon>
+            <v-icon> exit_to_app </v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title> Sign Out </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
     </v-navigation-drawer>
 
     <div>
@@ -58,6 +78,16 @@
               {{ item.icon }}
             </v-icon>
             {{ item.title }}
+          </v-btn>
+          <v-btn
+            v-if="userIsAuthenticated"
+            text
+            @click="onSignout"
+          >
+            <v-icon left>
+              exit_to_app
+            </v-icon>
+            Sign Out
           </v-btn>
         </v-toolbar-items>
       </v-toolbar>
@@ -100,6 +130,11 @@ export default Vue.extend({
       // console.log(authenticated)
 
       return authenticated
+    }
+  },
+  methods: {
+    onSignout () {
+      this.$store.dispatch('signoutAction')
     }
   }
 })
