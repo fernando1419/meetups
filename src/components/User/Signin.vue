@@ -1,5 +1,19 @@
 <template>
   <v-container>
+    <v-layout
+      v-if="errorProperty"
+    >
+      <v-flex
+        xs12
+        sm6
+        offset-sm3
+      >
+        <app-alert
+          :text="errorProperty.message"
+          @dismissed="onDismissed"
+        />
+      </v-flex>
+    </v-layout>
     <v-layout>
       <v-flex
         xs12
@@ -43,8 +57,15 @@
                   <v-flex xs12>
                     <v-btn
                       type="submit"
+                      :loading="loadingProperty"
                     >
                       Sign in
+                      <span
+                        slot="loader"
+                        class="custom-loader"
+                      >
+                        <v-icon light> cached </v-icon>
+                      </span>
                     </v-btn>
                   </v-flex>
                 </v-layout>
@@ -68,6 +89,12 @@ export default {
   computed: {
     user() {
       return this.$store.getters.getUser; // returns a user from store using a getter.
+    },
+    errorProperty() {
+      return this.$store.getters.getError;
+    },
+    loadingProperty() {
+      return this.$store.getters.getLoading;
     }
   },
   watch: { // watches the computed property "user"
@@ -81,6 +108,10 @@ export default {
     onSignin() {
       // console.log({email: this.email, password: this.password, confirmPassword: this.confirmPassword})
       this.$store.dispatch('signinUserAction', { email: this.email, password: this.password})
+    },
+    onDismissed () {
+      // console.log('Dismissed Alert')
+      this.$store.dispatch('clearErrorAction')
     }
   }
 }

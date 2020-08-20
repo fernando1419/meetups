@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Vuex, { mapGetters } from "vuex";
+import Vuex from "vuex";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 
@@ -36,7 +36,9 @@ export default new Vuex.Store({
         description: "Meetup at Russia City"
       }
     ],
-    user: null // don't start with a user in our app
+    user: null, // don't start with a user in our app
+    loading: false,
+    error: null
   },
   mutations: {
     createMeetupMutation(state, payload) {
@@ -44,6 +46,15 @@ export default new Vuex.Store({
     },
     createUserMutation(state, payload) {
       state.user = payload;
+    },
+    setLoadingMutation(state, payload) {
+      state.loading = payload;
+    },
+    setErrorMutation(state, payload) {
+      state.error = payload;
+    },
+    clearErrorMutation(state) {
+      state.error = null;
     }
   },
   actions: {
@@ -60,52 +71,76 @@ export default new Vuex.Store({
       commit("createMeetupMutation", meetup);
     },
     signupUserAction({ commit }, payload) {
+      commit("setLoadingMutation", true);
+      commit("clearErrorMutation");
       firebase
         .auth()
         .createUserWithEmailAndPassword(payload.email, payload.password)
         .then(response => {
+          commit("setLoadingMutation", false);
           const newUserData = {
             id: response.user?.uid,
             registeredMeetups: []
           };
           commit("createUserMutation", newUserData);
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+          commit("setLoadingMutation", false);
+          commit("setErrorMutation", error);
+          console.log(error);
+        });
     },
     signinUserAction({ commit }, payload) {
+      commit("setLoadingMutation", true);
+      commit("clearErrorMutation");
       firebase
         .auth()
         .signInWithEmailAndPassword(payload.email, payload.password)
         .then(response => {
+          commit("setLoadingMutation", false);
           const newUserData = {
             id: response.user?.uid,
             registeredMeetups: []
           };
           commit("createUserMutation", newUserData);
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+          commit("setLoadingMutation", false);
+          commit("setErrorMutation", error);
+          console.log(error);
+        });
+    },
+    clearErrorAction({ commit }) {
+      commit("clearErrorMutation");
     }
   },
   getters: {
-    getLoadedMeetups(state: any) {
-      return state.loadedMeetups.sort((meetupA: any, meetupB: any) => {
-        return meetupA.date > meetupB.date;
-      });
+    getLoadedMeetups(state) {
+      // return state.loadedMeetups.sort((meetupA: any, meetupB: any) => {
+      //   return meetupA.date > meetupB.date;
+      // });
+      return state.loadedMeetups;
     },
-    getFeaturedMeetups(state: any, getters) {
+    getFeaturedMeetups(state, getters) {
       // get only 5 meetups using the getLoadedMeetups
       return getters.getLoadedMeetups.slice(0, 5);
     },
-    getLoadedMeetup(state: any) {
-      return (meetupId: any) => {
-        return state.loadedMeetups.find((meetup: any) => {
+    getLoadedMeetup(state) {
+      return (meetupId: string) => {
+        return state.loadedMeetups.find(meetup => {
           // "loadedMeetups" is a state property not a getter.
           return meetup.id === meetupId;
         });
       };
     },
-    getUser(state: any) {
+    getUser(state) {
       return state.user; // return user from vuex store.
+    },
+    getLoading(state) {
+      return state.loading;
+    },
+    getError(state) {
+      return state.error;
     }
   }
   // modules: {}

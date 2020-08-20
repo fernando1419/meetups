@@ -1,5 +1,19 @@
 <template>
   <v-container>
+    <v-layout
+      v-if="errorProperty"
+    >
+      <v-flex
+        xs12
+        sm6
+        offset-sm3
+      >
+        <app-alert
+          :text="errorProperty.message"
+          @dismissed="onDismissed"
+        />
+      </v-flex>
+    </v-layout>
     <v-layout>
       <v-flex
         xs12
@@ -56,8 +70,15 @@
                   <v-flex xs12>
                     <v-btn
                       type="submit"
+                      :loading="loadingProperty"
                     >
                       Sign up
+                      <span
+                        slot="loader"
+                        class="custom-loader"
+                      >
+                        <v-icon light> cached </v-icon>
+                      </span>
                     </v-btn>
                   </v-flex>
                 </v-layout>
@@ -85,6 +106,12 @@ export default {
     },
     user() {
       return this.$store.getters.getUser; // returns a user from store using a getter.
+    },
+    errorProperty() {
+      return this.$store.getters.getError;
+    },
+    loadingProperty() {
+      return this.$store.getters.getLoading;
     }
   },
   watch: { // watches the computed property "user"
@@ -95,14 +122,55 @@ export default {
     }
   },
   methods: {
-    onSignup() {
+    onSignup () {
       // console.log({email: this.email, password: this.password, confirmPassword: this.confirmPassword})
       this.$store.dispatch('signupUserAction', { email: this.email, password: this.password})
+    },
+    onDismissed () {
+      // console.log('Dismissed Alert')
+      this.$store.dispatch('clearErrorAction')
     }
   }
 }
 </script>
 
 <style>
-
+  /* styles grabbed form vuetifyjs.com Loaders buttons section */
+  .custom-loader {
+    animation: loader 1s infinite;
+    display: flex;
+  }
+  @-moz-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-webkit-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-o-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 </style>
+
