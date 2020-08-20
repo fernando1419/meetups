@@ -1,6 +1,7 @@
 <template>
   <v-container>
     <v-layout
+      v-if="meetup"
       row
       wrap
     >

@@ -31,7 +31,27 @@
         </v-btn>
       </v-flex>
     </v-layout>
+
     <v-layout
+      row
+      wrap
+    >
+      <v-flex
+        xs12
+        class="text-center"
+      >
+        <v-progress-circular
+          v-if="loadingProperty"
+          indeterminate
+          class="primary--text"
+          :width="17"
+          :size="70"
+        />
+      </v-flex>
+    </v-layout>
+
+    <v-layout
+      v-if="! loadingProperty"
       row
       wrap
       class="mt-2"
@@ -73,6 +93,9 @@ export default {
   computed: {
     meetups() {
       return this.$store.getters.getFeaturedMeetups;
+    },
+    loadingProperty() {
+      return this.$store.getters.getLoading;
     }
   },
   methods: {

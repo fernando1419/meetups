@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import * as firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/database";
 
 Vue.use(Vuex);
 
@@ -41,6 +42,9 @@ export default new Vuex.Store({
     error: null
   },
   mutations: {
+    setLoadedMeetupsMutation(state, payload) {
+      state.loadedMeetups = payload;
+    },
     createMeetupMutation(state, payload) {
       state.loadedMeetups.push(payload);
     },
@@ -58,17 +62,57 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    loadMeetupsAction({ commit }) {
+      commit("setLoadingMutation", true);
+      firebase
+        .database()
+        .ref("meetupDB")
+        .once("value")
+        .then(response => {
+          const meetups = [];
+          const obj = response.val();
+          for (const key in obj) {
+            meetups.push({
+              id: key,
+              title: obj[key].title,
+              description: obj[key].description,
+              imageUrl: obj[key].imageUrl,
+              date: obj[key].date
+            });
+          }
+          commit("setLoadedMeetupsMutation", meetups);
+          commit("setLoadingMutation", false);
+        })
+        .catch(error => {
+          console.log(error);
+          commit("setLoadingMutation", false);
+        });
+    },
     createMeetupAction({ commit }, payload) {
       const meetup = {
         title: payload.title,
         location: payload.location,
         imageUrl: payload.imageUrl,
         description: payload.description,
-        date: payload.date,
-        id: "akldjfñlajfalñsdfjalñsd"
+        date: payload.date.toISOString()
+        // id: "akldjfñlajfalñsdfjalñsd"
       };
       // reach out to firebase and store it...
-      commit("createMeetupMutation", meetup);
+      firebase
+        .database()
+        .ref("meetupDB")
+        .push(meetup)
+        .then(response => {
+          console.log("response: ", response);
+          console.log("key: ", response.key);
+          commit("createMeetupMutation", {
+            ...meetup,
+            id: response.key
+          }); // call mutation only if success.
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     signupUserAction({ commit }, payload) {
       commit("setLoadingMutation", true);
