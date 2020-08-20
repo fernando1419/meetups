@@ -78,13 +78,27 @@ export default Vue.extend({
   },
   data: () => ({
     showSideBar: false,
-    menuItems: [
+    unAuthenticatedMenuItems: [
+      { icon: 'face', title: 'Sign up', link: '/signup' },
+      { icon: 'lock_open', title: 'Sign in', link: '/signin' }
+    ],
+    authenticatedMenuItems: [
       { icon: 'supervisor_account', title: 'View Meetups', link: '/meetups' },
       { icon: 'room', title: 'Organize Meetup', link: '/meetup/new' },
       { icon: 'person', title: 'Profile', link: '/profile' },
-      { icon: 'face', title: 'Sign up', link: '/signup' },
-      { icon: 'lock_open', title: 'Sign in', link: '/signin' }
     ]
-  })
+  }),
+  computed: {
+    menuItems () {
+      if (this.userIsAuthenticated) {
+        return this.authenticatedMenuItems
+      }
+      return this.unAuthenticatedMenuItems;
+    },
+    userIsAuthenticated () {
+      return this.$store.getters.getUser?.user ? true : false
+      // return this.$store.getters.getUser !== null && this.$store.getters.getUser !== undefined // same as above
+    }
+  }
 })
 </script>

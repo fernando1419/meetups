@@ -9,7 +9,7 @@
         <v-card>
           <v-card-text>
             <v-container>
-              <v-form>
+              <v-form @submit.prevent="onSignup">
                 <v-layout row>
                   <v-flex xs12>
                     <v-text-field
@@ -80,15 +80,24 @@ export default {
     }
   },
   computed: {
-    comparePasswords() {
-      return this.password !== this.confirmPassword ? 'Passwords do not match.' : null
+    comparePasswords () {
+      return this.password !== this.confirmPassword ? 'Passwords do not match.' : true
+    },
+    user() {
+      return this.$store.getters.getUser; // returns a user from store using a getter.
+    }
+  },
+  watch: { // watches the computed property "user"
+    user (value) { // whenever the value changes, when the getter retrieves us another state value.
+      if (value !== null && value !== undefined) {
+        return this.$router.push('/') // redirect to "/" after successful signup.
+      }
     }
   },
   methods: {
     onSignup() {
-      // reach out to firebase
-      // create a new user
-      console.log({email: this.email, password: this.password, confirmPassword: this.confirmPassword})
+      // console.log({email: this.email, password: this.password, confirmPassword: this.confirmPassword})
+      this.$store.dispatch('signupUserAction', { email: this.email, password: this.password})
     }
   }
 }

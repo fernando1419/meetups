@@ -5,7 +5,7 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import DateFilter from "./filters/date";
-import * as firebase from "firebase";
+import * as firebase from "firebase/app"; // suggested import instead of "firebase"
 
 Vue.config.productionTip = false;
 

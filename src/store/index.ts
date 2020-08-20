@@ -1,5 +1,7 @@
 import Vue from "vue";
 import Vuex, { mapGetters } from "vuex";
+import * as firebase from "firebase/app";
+import "firebase/auth";
 
 Vue.use(Vuex);
 
@@ -34,14 +36,14 @@ export default new Vuex.Store({
         description: "Meetup at Russia City"
       }
     ],
-    user: {
-      id: "ulksdfjlasfjalsfjlasf",
-      registeredMeetups: ["aksdfjalfjalskfda"]
-    }
+    user: null // don't start with a user in our app
   },
   mutations: {
     createMeetupMutation(state, payload) {
-      return state.loadedMeetups.push(payload);
+      state.loadedMeetups.push(payload);
+    },
+    createUserMutation(state, payload) {
+      state.user = payload;
     }
   },
   actions: {
@@ -56,6 +58,19 @@ export default new Vuex.Store({
       };
       // reach out to firebase and store it...
       commit("createMeetupMutation", meetup);
+    },
+    signupUserAction({ commit }, payload) {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(payload.email, payload.password)
+        .then(response => {
+          const newUserData = {
+            id: response.user?.uid,
+            registeredMeetups: []
+          };
+          commit("createUserMutation", newUserData);
+        })
+        .catch(error => console.log(error));
     }
   },
   getters: {
@@ -75,6 +90,9 @@ export default new Vuex.Store({
           return meetup.id === meetupId;
         });
       };
+    },
+    getUser(state: any) {
+      return state.user; // return user from vuex store.
     }
   }
   // modules: {}
