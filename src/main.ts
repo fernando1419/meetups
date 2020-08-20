@@ -27,6 +27,13 @@ new Vue({
       appId: "1:86039230417:web:c123eaac9629d20c0752f0"
       // messagingSenderId: "86039230417",
     });
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.$store.dispatch("autoSigninAction", user);
+      }
+    });
+
     this.$store.dispatch("loadMeetupsAction");
   },
   render: h => h(App)

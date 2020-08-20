@@ -154,6 +154,10 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    autoSigninAction({ commit }, payload) {
+      // this payload is got from firebase.
+      commit("createUserMutation", { id: payload.uid, registeredMeetups: [] });
+    },
     clearErrorAction({ commit }) {
       commit("clearErrorMutation");
     }
