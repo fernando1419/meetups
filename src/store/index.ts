@@ -77,7 +77,8 @@ export default new Vuex.Store({
               title: obj[key].title,
               description: obj[key].description,
               imageUrl: obj[key].imageUrl,
-              date: obj[key].date
+              date: obj[key].date,
+              userId: obj[key].userId
             });
           }
           commit("setLoadedMeetupsMutation", meetups);
@@ -88,13 +89,14 @@ export default new Vuex.Store({
           commit("setLoadingMutation", false);
         });
     },
-    createMeetupAction({ commit }, payload) {
+    createMeetupAction({ commit, getters }, payload) {
       const meetup = {
         title: payload.title,
         location: payload.location,
         imageUrl: payload.imageUrl,
         description: payload.description,
-        date: payload.date.toISOString()
+        date: payload.date.toISOString(),
+        userId: getters.getUser.id
         // id: "akldjfñlajfalñsdfjalñsd"
       };
       // reach out to firebase and store it...
