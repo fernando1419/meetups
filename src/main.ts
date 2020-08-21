@@ -5,7 +5,7 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import DateFilter from "./filters/date";
-import * as firebase from "firebase/app"; // suggested import instead of "firebase"
+import * as firebase from "firebase"; // suggested import instead of "firebase"
 import AlertComponent from "./components/Shared/Alert.vue"; // available in the hole app.
 
 Vue.config.productionTip = false;
@@ -23,7 +23,7 @@ new Vue({
       authDomain: "devmeetup-1881c.firebaseapp.com",
       databaseURL: "https://devmeetup-1881c.firebaseio.com",
       projectId: "devmeetup-1881c",
-      storageBucket: "devmeetup-1881c.appspot.com",
+      storageBucket: "gs://devmeetup-1881c.appspot.com/",
       appId: "1:86039230417:web:c123eaac9629d20c0752f0"
       // messagingSenderId: "86039230417",
     });

@@ -50,16 +50,23 @@
               sm6
               offset-sm3
             >
-              <v-text-field
-                id="image-url"
-                v-model="imageUrl"
-                name="imageUrl"
-                label="Image URL"
-                required
+              <v-file-input
+                v-model="image"
+                label="File input"
+                dense
+                append-icon="mdi-camera"
+                accept="image/*"
+                small-chips
+                show-size
+                loading="true"
+                @change="onFilePicked"
               />
             </v-flex>
           </v-layout>
-          <v-layout row>
+          <v-layout
+            v-show="imageUrl"
+            row
+          >
             <v-flex
               xs12
               sm6
@@ -67,7 +74,8 @@
             >
               <img
                 :src="imageUrl"
-                height="100px"
+                height="140px"
+                width="200px"
               />
             </v-flex>
           </v-layout>
@@ -151,18 +159,22 @@ export default {
     return {
       title: '',
       location: '',
-      imageUrl: 'https://giraldodetodounpoco.files.wordpress.com/2014/02/meetup.png',
+      imageUrl: null, // 'https://giraldodetodounpoco.files.wordpress.com/2014/02/meetup.png',
+      image: null,
       description: '',
       date: new Date().toISOString().substr(0, 10), // e.g. 2020-08-18
       time: new Date().toISOString().substr(11, 5), // e.g. 01:23
+
     }
   },
   computed: {
     formIsValid() {
-      return this.title !== '' && this.location !== '' && this.imageUrl !== '' && this.description !== ''
+      return this.title !== '' &&
+             this.location !== '' &&
+             this.imageUrl !== '' &&
+             this.description !== ''
     },
     submittableDateTime() {
-
       const date = new Date(this.date)
       date.setDate(date.getDate() + 1) // workaround, always getting 1 day before after picking.
       if (typeof this.time === 'string') {
@@ -187,11 +199,30 @@ export default {
         title: this.title,
         location: this.location,
         description: this.description,
-        imageUrl: this.imageUrl,
+        image: this.image,
         date: this.submittableDateTime
       }
       this.$store.dispatch('createMeetupAction', formMeetupData)
       this.$router.push('/meetups')
+    },
+    onFilePicked (e) {
+      // console.log(e)
+      this.imageUrl = null;
+
+      if (e !== null && e !== undefined) {
+        const filename = e.name;
+        const reader = new FileReader();
+          // console.log(reader)
+        if (filename.lastIndexOf('.') <= 0) {
+          return alert('Please add a valid file');
+        }
+        reader.onload = () => {
+          this.imageUrl = reader.result;
+          // console.log(this.imageUrl)
+        }
+        reader.readAsDataURL(e) // this line displays the "image preview"
+        this.image = e;
+      }
     }
   }
 }

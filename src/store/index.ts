@@ -1,8 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import * as firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/database";
+import * as firebase from "firebase";
 
 Vue.use(Vuex);
 
@@ -93,26 +91,52 @@ export default new Vuex.Store({
       const meetup = {
         title: payload.title,
         location: payload.location,
-        imageUrl: payload.imageUrl,
+        // imageUrl: payload.imageUrl,
         description: payload.description,
         date: payload.date.toISOString(),
         userId: getters.getUser.id
         // id: "akldjfñlajfalñsdfjalñsd"
       };
       // reach out to firebase and store it...
+      let key: any;
+      let imageUrl: any;
+      let uploadTask: any;
       firebase
         .database()
         .ref("meetupDB")
         .push(meetup)
         .then(response => {
-          console.log("response: ", response);
-          console.log("key: ", response.key);
-          commit("createMeetupMutation", {
-            ...meetup,
-            id: response.key
-          }); // call mutation only if success.
+          // console.log("response: ", response);
+          // console.log("key: ", response.key); // id
+          key = response.key;
+          return key;
         })
-        .catch(error => {
+        .then(key => {
+          const filename = payload.image.name;
+          const extension = filename.slice(filename.lastIndexOf("."));
+          uploadTask = firebase
+            .storage()
+            .ref("meetupDB/" + key + "." + extension)
+            .put(payload.image);
+          return uploadTask;
+        })
+        .then(uploadTask => {
+          uploadTask.ref.getDownloadURL().then((downloadURL: any) => {
+            firebase
+              .database()
+              .ref("meetupDB")
+              .child(key)
+              .update({ imageUrl: downloadURL })
+              .then(() => {
+                commit("createMeetupMutation", {
+                  ...meetup,
+                  imageUrl: downloadURL,
+                  id: key
+                });
+              });
+          });
+        })
+        .catch((error: any) => {
           console.log(error);
         });
     },
