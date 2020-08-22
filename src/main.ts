@@ -7,11 +7,13 @@ import vuetify from "./plugins/vuetify";
 import DateFilter from "./filters/date";
 import * as firebase from "firebase"; // suggested import instead of "firebase"
 import AlertComponent from "./components/Shared/Alert.vue"; // available in the hole app.
+import EditMeetupDetails from "./components/Meetup/Edit/EditMeetupDetails.vue";
 
 Vue.config.productionTip = false;
 
 Vue.filter("date", DateFilter);
 Vue.component("app-alert", AlertComponent); // register the imported component
+Vue.component("app-edit-meetup-details", EditMeetupDetails);
 
 new Vue({
   router,
