@@ -10,6 +10,7 @@ import AlertComponent from "./components/Shared/Alert.vue"; // available in the 
 import EditMeetupDetails from "./components/Meetup/Edit/EditMeetupDetails.vue";
 import EditMeetupDate from "./components/Meetup/Edit/EditMeetupDate.vue";
 import EditMeetupTime from "./components/Meetup/Edit/EditMeetupTime.vue";
+import RegisterDialog from "./components/Meetup/Registration/RegisterDialog.vue";
 
 Vue.config.productionTip = false;
 
@@ -18,6 +19,7 @@ Vue.component("app-alert", AlertComponent); // register the imported component
 Vue.component("app-edit-meetup-details", EditMeetupDetails);
 Vue.component("app-edit-meetup-date", EditMeetupDate);
 Vue.component("app-edit-meetup-time", EditMeetupTime);
+Vue.component("app-meetup-register-dialog", RegisterDialog);
 
 new Vue({
    router,

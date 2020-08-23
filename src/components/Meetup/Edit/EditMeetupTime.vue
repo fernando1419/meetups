@@ -1,5 +1,5 @@
 <template>
-   <v-dialog v-model="dialog" width="350px">
+   <v-dialog v-model="dialog" width="350px" persistent>
       <!-- v-dialog must use a template slot -->
       <template v-slot:activator="{ on }">
          <v-btn accent v-on="on">

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Vue from "vue";
 import Vuex from "vuex";
 import * as firebase from "firebase";
@@ -40,6 +41,36 @@ export default new Vuex.Store({
       error: null
    },
    mutations: {
+      registerUserForMeetupMutation(state, payload) {
+         const id = payload.id;
+         const userState = state.user;
+         if (userState === null || typeof userState === undefined) {
+            return;
+         }
+
+         if (
+            userState.registeredMeetups.findIndex(
+               (meetup: any) => meetup.id === id
+            ) >= 0
+         ) {
+            return;
+         }
+
+         userState.registeredMeetups.push(id);
+         userState.fbKeys[id] = payload.fbKey;
+      },
+      unregisterUserFromMeetupMutation(state, payload) {
+         const userState = state.user;
+         if (userState === null || typeof userState === undefined) {
+            return;
+         }
+         const registeredMeetups = userState.registeredMeetups;
+         registeredMeetups.splice(
+            registeredMeetups.findIndex((meetup: any) => meetup.id === payload),
+            1
+         );
+         Reflect.deleteProperty(userState.fbKeys, payload);
+      },
       setLoadedMeetupsMutation(state, payload) {
          state.loadedMeetups = payload;
       },
@@ -79,6 +110,47 @@ export default new Vuex.Store({
       }
    },
    actions: {
+      registerUserForMeetupAction({ commit, getters }, payload) {
+         commit("setLoadingMutation", true);
+         const user = getters.getUser;
+         firebase
+            .database()
+            .ref("/users/" + user.id)
+            .child("/registrations/")
+            .push(payload)
+            .then(response => {
+               commit("setLoadingMutation", false);
+               commit("registerUserForMeetupMutation", {
+                  id: payload,
+                  fbKey: response.key
+               });
+            })
+            .catch(error => {
+               commit("setLoadingMutation", false);
+               console.log(error);
+            });
+      },
+      unregisterUserFromMeetupAction({ commit, getters }, payload) {
+         commit("setLoadingMutation", true);
+         const user = getters.getUser;
+         if (!user.fbKeys) {
+            return;
+         }
+         const fbKey = user.fbKeys[payload];
+         firebase
+            .database()
+            .ref("/users/" + user.id + "/registrations/")
+            .child(fbKey)
+            .remove()
+            .then(() => {
+               commit("setLoadingMutation", false);
+               commit("unregisterUserFromMeetupMutation", payload);
+            })
+            .catch(error => {
+               console.log(error);
+               commit("setLoadingMutation", false);
+            });
+      },
       loadMeetupsAction({ commit }) {
          commit("setLoadingMutation", true);
          firebase
@@ -194,7 +266,8 @@ export default new Vuex.Store({
                commit("setLoadingMutation", false);
                const newUserData = {
                   id: response.user?.uid,
-                  registeredMeetups: []
+                  registeredMeetups: [],
+                  fbKeys: {}
                };
                commit("createUserMutation", newUserData);
             })
@@ -214,7 +287,8 @@ export default new Vuex.Store({
                commit("setLoadingMutation", false);
                const newUserData = {
                   id: response.user?.uid,
-                  registeredMeetups: []
+                  registeredMeetups: [],
+                  fbKeys: {}
                };
                commit("createUserMutation", newUserData);
             })
@@ -228,7 +302,8 @@ export default new Vuex.Store({
          // this payload is got from firebase.
          commit("createUserMutation", {
             id: payload.uid,
-            registeredMeetups: []
+            registeredMeetups: [],
+            fbKeys: {}
          });
       },
       signoutAction({ commit }) {

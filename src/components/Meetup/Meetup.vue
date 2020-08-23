@@ -28,7 +28,8 @@
 
                <v-card-actions>
                   <v-spacer />
-                  <v-btn class="primary"> Register </v-btn>
+                  <!-- <v-btn class="primary"> Register </v-btn> -->
+                  <app-meetup-register-dialog :meetup-id-prop="meetup.id" />
                </v-card-actions>
             </v-card>
          </v-flex>
