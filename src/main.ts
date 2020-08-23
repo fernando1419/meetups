@@ -9,6 +9,7 @@ import * as firebase from "firebase"; // suggested import instead of "firebase"
 import AlertComponent from "./components/Shared/Alert.vue"; // available in the hole app.
 import EditMeetupDetails from "./components/Meetup/Edit/EditMeetupDetails.vue";
 import EditMeetupDate from "./components/Meetup/Edit/EditMeetupDate.vue";
+import EditMeetupTime from "./components/Meetup/Edit/EditMeetupTime.vue";
 
 Vue.config.productionTip = false;
 
@@ -16,6 +17,7 @@ Vue.filter("date", DateFilter);
 Vue.component("app-alert", AlertComponent); // register the imported component
 Vue.component("app-edit-meetup-details", EditMeetupDetails);
 Vue.component("app-edit-meetup-date", EditMeetupDate);
+Vue.component("app-edit-meetup-time", EditMeetupTime);
 
 new Vue({
    router,
