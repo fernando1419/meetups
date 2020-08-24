@@ -67,7 +67,7 @@ export default {
       }
    },
    actions: {
-      loadMeetupsAction({ commit }) {
+      loadMeetupsAction({ commit }: any) {
          commit("setLoadingMutation", true);
          firebase
             .database()
@@ -94,7 +94,7 @@ export default {
                commit("setLoadingMutation", false);
             });
       },
-      createMeetupAction({ commit, getters }, payload: any) {
+      createMeetupAction({ commit, getters }: any, payload: any) {
          const meetup = {
             title: payload.title,
             location: payload.location,
@@ -146,7 +146,7 @@ export default {
                console.log(error);
             });
       },
-      updateMeetupAction({ commit }, payload: any) {
+      updateMeetupAction({ commit }: any, payload: any) {
          commit("setLoadingMutation", true);
          const updateObj = {} as any; // define an empty object in typescript
          if (payload.title) {

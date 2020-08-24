@@ -15,7 +15,7 @@ export default {
       }
    },
    actions: {
-      clearErrorAction({ commit }) {
+      clearErrorAction({ commit }: any) {
          commit("clearErrorMutation");
       }
    },

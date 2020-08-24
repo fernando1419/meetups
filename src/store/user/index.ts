@@ -35,12 +35,12 @@ export default {
          );
          Reflect.deleteProperty(userState.fbKeys, payload);
       },
-      createUserMutation(state, payload: any) {
+      createUserMutation(state: any, payload: any) {
          state.user = payload;
       }
    },
    actions: {
-      registerUserForMeetupAction({ commit, getters }, payload: any) {
+      registerUserForMeetupAction({ commit, getters }: any, payload: any) {
          commit("setLoadingMutation", true);
          const user = getters.getUser;
          firebase
@@ -60,7 +60,7 @@ export default {
                console.log(error);
             });
       },
-      unregisterUserFromMeetupAction({ commit, getters }, payload: any) {
+      unregisterUserFromMeetupAction({ commit, getters }: any, payload: any) {
          commit("setLoadingMutation", true);
          const user = getters.getUser;
          if (!user.fbKeys) {
@@ -81,7 +81,7 @@ export default {
                commit("setLoadingMutation", false);
             });
       },
-      signupUserAction({ commit }, payload: any) {
+      signupUserAction({ commit }: any, payload: any) {
          commit("setLoadingMutation", true);
          commit("clearErrorMutation");
          firebase
@@ -102,7 +102,7 @@ export default {
                console.log(error);
             });
       },
-      signinUserAction({ commit }, payload: any) {
+      signinUserAction({ commit }: any, payload: any) {
          commit("setLoadingMutation", true);
          commit("clearErrorMutation");
          firebase
@@ -123,7 +123,7 @@ export default {
                console.log(error);
             });
       },
-      autoSigninAction({ commit }, payload: any) {
+      autoSigninAction({ commit }: any, payload: any) {
          // this payload is got from firebase.
          commit("createUserMutation", {
             id: payload.uid,
@@ -131,7 +131,7 @@ export default {
             fbKeys: {}
          });
       },
-      fetchUserDataAction({ commit, getters }) {
+      fetchUserDataAction({ commit, getters }: any) {
          commit("setLoadingMutation", true);
          firebase
             .database()
@@ -140,8 +140,8 @@ export default {
             .then(data => {
                const dataPairs = data.val();
                // console.log(dataPairs);
-               const registeredMeetups = [];
-               const swappedPairs = {};
+               const registeredMeetups: any = [];
+               const swappedPairs: any = {};
                for (const key in dataPairs) {
                   registeredMeetups.push(dataPairs[key]);
                   swappedPairs[dataPairs[key]] = key;
@@ -161,7 +161,7 @@ export default {
                commit("setLoadingMutation", false);
             });
       },
-      signoutAction({ commit }) {
+      signoutAction({ commit }: any) {
          firebase.auth().signOut(); // removes from localstorage
          commit("createUserMutation", null); // in store
       }
