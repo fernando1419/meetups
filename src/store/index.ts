@@ -306,6 +306,36 @@ export default new Vuex.Store({
             fbKeys: {}
          });
       },
+      fetchUserDataAction({ commit, getters }) {
+         commit("setLoadingMutation", true);
+         firebase
+            .database()
+            .ref("/users/" + getters.getUser.id + "/registrations/")
+            .once("value")
+            .then(data => {
+               const dataPairs = data.val();
+               // console.log(dataPairs);
+               let registeredMeetups = [];
+               let swappedPairs = {};
+               for (let key in dataPairs) {
+                  registeredMeetups.push(dataPairs[key]);
+                  swappedPairs[dataPairs[key]] = key;
+               }
+               // console.log(registeredMeetups);
+               // console.log(swappedPairs);
+               const updatedUser = {
+                  id: getters.getUser.id,
+                  registeredMeetups: registeredMeetups,
+                  fbKeys: swappedPairs
+               };
+               commit("setLoadingMutation", false);
+               commit("createUserMutation", updatedUser);
+            })
+            .catch(error => {
+               console.log(error);
+               commit("setLoadingMutation", false);
+            });
+      },
       signoutAction({ commit }) {
          firebase.auth().signOut(); // removes from localstorage
          commit("createUserMutation", null); // in store

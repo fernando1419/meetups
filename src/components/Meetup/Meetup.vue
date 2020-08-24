@@ -28,8 +28,8 @@
 
                <v-card-actions>
                   <v-spacer />
-                  <!-- <v-btn class="primary"> Register </v-btn> -->
-                  <app-meetup-register-dialog :meetup-id-prop="meetup.id" />
+                  <!-- app-meetup-register-dialog will only be displayed if the user is logged y no es el creador de la meetup -->
+                  <app-meetup-register-dialog v-if="userIsAuthenticated && ! userIsCreator" :meetup-id-prop="meetup.id" />
                </v-card-actions>
             </v-card>
          </v-flex>
@@ -46,7 +46,7 @@ export default {
          return this.$store.getters.getLoadedMeetup(this.id)
       },
       userIsAuthenticated() {
-         return this.$store.getters.getUser !==  null && this.$store.getters.getUser !== undefined
+         return this.$store.getters.getUser !==  null && typeof (this.$store.getters.getUser) !== undefined
       },
       userIsCreator() {
          if (! this.userIsAuthenticated) {
